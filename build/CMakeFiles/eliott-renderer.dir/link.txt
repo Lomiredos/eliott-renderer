@@ -1,2 +1,0 @@
-C:\msys64\mingw64\bin\ar.exe qc libeliott-renderer.a "CMakeFiles/eliott-renderer.dir/src/Renderer.cpp.obj" "CMakeFiles/eliott-renderer.dir/src/Texture.cpp.obj" "CMakeFiles/eliott-renderer.dir/src/SpriteBatch.cpp.obj"
-C:\msys64\mingw64\bin\ranlib.exe libeliott-renderer.a
