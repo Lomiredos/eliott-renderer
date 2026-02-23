@@ -1,0 +1,3 @@
+[submodule "extern/eliott-ecs"]
+	path = extern/eliott-ecs
+	url = https://github.com/Lomiredos/eliott-ecs/
