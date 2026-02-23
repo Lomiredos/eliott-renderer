@@ -1,0 +1,25 @@
+# Build
+build/
+out/
+cmake-build-*/
+
+# Compiled
+*.lib
+*.a
+*.dll
+*.exe
+*.o
+*.obj
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+
+# VS Code
+.vscode/
+
+# Windows
+Thumbs.db
+desktop.ini
