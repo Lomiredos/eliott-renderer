@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Dev/eliott-renderer/build/cmake_install.cmake",
+		"C:/Dev/eliott-renderer/build/extern/eliott-ecs/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

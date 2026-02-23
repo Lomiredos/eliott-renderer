@@ -1,0 +1,26 @@
+[
+{
+  "directory": "C:/Dev/eliott-renderer/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  -IC:\\Dev\\eliott-renderer\\include -IC:\\Dev\\eliott-renderer\\extern\\eliott-ecs\\include -isystem C:\\Dev\\vcpkg\\installed\\x64-mingw-static\\include -g -std=gnu++20 -o CMakeFiles\\eliott-renderer.dir\\src\\Renderer.cpp.obj -c C:\\Dev\\eliott-renderer\\src\\Renderer.cpp",
+  "file": "C:/Dev/eliott-renderer/src/Renderer.cpp",
+  "output": "CMakeFiles/eliott-renderer.dir/src/Renderer.cpp.obj"
+},
+{
+  "directory": "C:/Dev/eliott-renderer/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  -IC:\\Dev\\eliott-renderer\\include -IC:\\Dev\\eliott-renderer\\extern\\eliott-ecs\\include -isystem C:\\Dev\\vcpkg\\installed\\x64-mingw-static\\include -g -std=gnu++20 -o CMakeFiles\\eliott-renderer.dir\\src\\Texture.cpp.obj -c C:\\Dev\\eliott-renderer\\src\\Texture.cpp",
+  "file": "C:/Dev/eliott-renderer/src/Texture.cpp",
+  "output": "CMakeFiles/eliott-renderer.dir/src/Texture.cpp.obj"
+},
+{
+  "directory": "C:/Dev/eliott-renderer/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  -IC:\\Dev\\eliott-renderer\\include -IC:\\Dev\\eliott-renderer\\extern\\eliott-ecs\\include -isystem C:\\Dev\\vcpkg\\installed\\x64-mingw-static\\include -g -std=gnu++20 -o CMakeFiles\\eliott-renderer.dir\\src\\SpriteBatch.cpp.obj -c C:\\Dev\\eliott-renderer\\src\\SpriteBatch.cpp",
+  "file": "C:/Dev/eliott-renderer/src/SpriteBatch.cpp",
+  "output": "CMakeFiles/eliott-renderer.dir/src/SpriteBatch.cpp.obj"
+},
+{
+  "directory": "C:/Dev/eliott-renderer/build/extern/eliott-ecs",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  -IC:\\Dev\\eliott-renderer\\extern\\eliott-ecs\\include -g -std=gnu++20 -o CMakeFiles\\eliott-ecs.dir\\src\\EntityManager.cpp.obj -c C:\\Dev\\eliott-renderer\\extern\\eliott-ecs\\src\\EntityManager.cpp",
+  "file": "C:/Dev/eliott-renderer/extern/eliott-ecs/src/EntityManager.cpp",
+  "output": "extern/eliott-ecs/CMakeFiles/eliott-ecs.dir/src/EntityManager.cpp.obj"
+}
+]

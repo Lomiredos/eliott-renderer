@@ -1,0 +1,6 @@
+C:/Dev/eliott-renderer/build/CMakeFiles/eliott-renderer.dir
+C:/Dev/eliott-renderer/build/CMakeFiles/edit_cache.dir
+C:/Dev/eliott-renderer/build/CMakeFiles/rebuild_cache.dir
+C:/Dev/eliott-renderer/build/extern/eliott-ecs/CMakeFiles/eliott-ecs.dir
+C:/Dev/eliott-renderer/build/extern/eliott-ecs/CMakeFiles/edit_cache.dir
+C:/Dev/eliott-renderer/build/extern/eliott-ecs/CMakeFiles/rebuild_cache.dir
