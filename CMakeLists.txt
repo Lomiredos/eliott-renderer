@@ -12,8 +12,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(SDL3 CONFIG REQUIRED)
 find_package(SDL3_image CONFIG REQUIRED)
 
-set(ELIOTT_ECS_BUILD_TESTS OFF)
 add_subdirectory(extern/eliott-ecs)
+add_subdirectory(extern/eliott-math)
 
 
 add_library(eliott-renderer STATIC
@@ -28,6 +28,10 @@ target_include_directories(eliott-renderer PUBLIC
 
 target_link_libraries(eliott-renderer PRIVATE
     eliott-ecs
-SDL3::SDL3
+    SDL3::SDL3
     SDL3_image::SDL3_image
+)
+
+target_link_libraries(eliott-renderer PUBLIC
+    eliott-math
 )

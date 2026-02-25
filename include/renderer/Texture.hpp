@@ -1,8 +1,9 @@
 #pragma once
-#include "SDL3/SDL.h"
+
 #include <stdexcept>
 
-
+struct SDL_Texture;
+struct SDL_Renderer;
 namespace ee::renderer{
 
 
@@ -21,9 +22,7 @@ namespace ee::renderer{
             Texture& operator=(const Texture&) = delete;
             
             public:
-            ~Texture() {
-                SDL_DestroyTexture(m_texture);
-            };
+            ~Texture();
             
             SDL_Texture* getTexture() const {return m_texture;}
             
@@ -32,9 +31,5 @@ namespace ee::renderer{
 
         private:
         friend class Renderer;
-
-
     };
-
-
 }

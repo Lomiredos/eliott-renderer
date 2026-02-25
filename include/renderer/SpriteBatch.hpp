@@ -3,11 +3,11 @@
 #include <vector>
 #include <optional>
 
-#include "SDL3/SDL.h"
-
 #include "Texture.hpp"
 #include "Renderer.hpp"
 #include "Camera.hpp"
+
+#include "math/Rect.hpp"
 
 namespace ee::renderer
 {
@@ -15,8 +15,8 @@ namespace ee::renderer
     struct SpriteEntry
     {
         const Texture *m_texture;
-        SDL_FRect m_destRect;
-        std::optional<SDL_FRect> m_srcRect;
+        ee::math::Rect<float> m_destRect;
+        std::optional<ee::math::Rect<float>> m_srcRect;
     };
 
     class SpriteBatch
