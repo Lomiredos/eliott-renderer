@@ -14,6 +14,8 @@ ee::renderer::Renderer::Renderer(float _width, float _height, const char *_name)
 
     if (!m_renderer)
         throw std::runtime_error(SDL_GetError());
+
+    m_textureManager.init(m_renderer);
 }
 
 ee::renderer::Renderer::~Renderer()
@@ -45,13 +47,13 @@ void ee::renderer::Renderer::Draw(const Texture &_text, ee::math::Rect<float> _d
 {
         SDL_FRect dstRect;
     dstRect.x = _destRect.getPosition().x;
-    dstRect.x = _destRect.getPosition().x;
+    dstRect.y = _destRect.getPosition().y;
     dstRect.w = _destRect.getSize().x;
     dstRect.h = _destRect.getSize().y;
 
         SDL_FRect srcRect;
     srcRect.x = _srcRect.getPosition().x;
-    srcRect.x = _srcRect.getPosition().x;
+    srcRect.y = _srcRect.getPosition().y;
     srcRect.w = _srcRect.getSize().x;
     srcRect.h = _srcRect.getSize().y;
     SDL_RenderTexture(m_renderer, _text.getTexture(), &srcRect, &dstRect);

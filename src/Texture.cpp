@@ -11,6 +11,6 @@ ee::renderer::Texture::Texture(SDL_Renderer *_renderer, const char *_path)
     SDL_GetTextureSize(m_texture, &m_width, &m_height);
 }
 ee::renderer::Texture::~Texture()
- {
-                SDL_DestroyTexture(m_texture);
-            };
+{
+    SDL_DestroyTexture(m_texture);
+};
