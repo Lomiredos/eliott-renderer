@@ -28,12 +28,12 @@ namespace ee::renderer
         Renderer(float _width, float _height, const char *_name);
         ~Renderer();
 
-        std::shared_ptr<Texture> createTexture(std::string _name, const char *_path)
+        std::shared_ptr<Texture> createTexture(std::string _name, const char *_path) 
         {
             return m_textureManager.addTexture(_name, _path);
         }
 
-        std::shared_ptr<Texture> getTexture(std::string _name)
+        std::shared_ptr<Texture> getTexture(std::string _name) 
         {
             return m_textureManager.getTexture(_name);
         }
