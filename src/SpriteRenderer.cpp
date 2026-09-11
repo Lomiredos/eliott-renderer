@@ -1,0 +1,53 @@
+#include "renderer/SpriteRenderer.hpp"
+
+#include <vector>
+#include <algorithm>
+
+void ee::renderer::SpriteRenderer::render(Renderer &_renderer, const Camera &_camera)
+{
+    std::vector<ee::ecs::EntityID> ordered(m_system->m_entities.begin(),
+                                           m_system->m_entities.end());
+
+    std::sort(ordered.begin(), ordered.end(),
+              [this](ee::ecs::EntityID _a, ee::ecs::EntityID _b)
+              {
+                  return m_world.getComponent<Sprite>(_a).layer <
+                         m_world.getComponent<Sprite>(_b).layer;
+              });
+
+    std::vector<SpriteEntry> entries;
+    entries.reserve(ordered.size());
+
+    for (ee::ecs::EntityID id : ordered)
+    {
+        const ee::math::Transform &transform = m_world.getComponent<ee::math::Transform>(id);
+        const Sprite &sprite = m_world.getComponent<Sprite>(id);
+
+        if (!sprite.texture)
+            continue;
+
+        ee::math::Vector2<float> baseSize =
+            sprite.srcRect
+                ? sprite.srcRect->getSize()
+                : ee::math::Vector2<float>(sprite.texture->getWidth(), sprite.texture->getHeight());
+
+        ee::math::Vector2<float> drawSize(baseSize.x * transform.scale.x,
+                                          baseSize.y * transform.scale.y);
+
+        ee::math::Rect<float> destRect;
+        destRect.setSize(drawSize);
+        destRect.setPosition(transform.position);
+
+        SpriteEntry entry;
+        entry.m_texture = sprite.texture.get();
+        entry.m_destRect = destRect;
+        entry.m_srcRect = sprite.srcRect;
+        entry.m_angle = transform.rotation;
+        entry.m_alpha = sprite.alpha;
+        entry.m_tint = sprite.tint;
+
+        entries.push_back(entry);
+    }
+
+    m_batch.DrawAll(_renderer, _camera, entries);
+}

@@ -23,6 +23,7 @@ add_library(eliott-renderer STATIC
     src/Renderer.cpp
     src/Texture.cpp
     src/SpriteBatch.cpp
+    src/SpriteRenderer.cpp
 )
 
 target_include_directories(eliott-renderer PUBLIC
@@ -30,11 +31,11 @@ target_include_directories(eliott-renderer PUBLIC
 )
 
 target_link_libraries(eliott-renderer PRIVATE
-    eliott-ecs
     SDL3::SDL3
     SDL3_image::SDL3_image
 )
 
 target_link_libraries(eliott-renderer PUBLIC
     eliott-math
+    eliott-ecs
 )
