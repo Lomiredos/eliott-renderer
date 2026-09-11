@@ -11,8 +11,8 @@ void ee::renderer::SpriteRenderer::render(Renderer &_renderer, const Camera &_ca
     std::sort(ordered.begin(), ordered.end(),
               [this](ee::ecs::EntityID _a, ee::ecs::EntityID _b)
               {
-                  return m_world.getComponent<Sprite>(_a).layer <
-                         m_world.getComponent<Sprite>(_b).layer;
+                  return m_world.getComponent<Sprite>(_a)->layer <
+                         m_world.getComponent<Sprite>(_b)->layer;
               });
 
     std::vector<SpriteEntry> entries;
@@ -20,31 +20,31 @@ void ee::renderer::SpriteRenderer::render(Renderer &_renderer, const Camera &_ca
 
     for (ee::ecs::EntityID id : ordered)
     {
-        const ee::math::Transform &transform = m_world.getComponent<ee::math::Transform>(id);
-        const Sprite &sprite = m_world.getComponent<Sprite>(id);
+        ee::math::Transform *transform = m_world.getComponent<ee::math::Transform>(id);
+        Sprite *sprite = m_world.getComponent<Sprite>(id);
 
-        if (!sprite.texture)
+        if (transform == nullptr || sprite == nullptr || !sprite->texture)
             continue;
 
         ee::math::Vector2<float> baseSize =
-            sprite.srcRect
-                ? sprite.srcRect->getSize()
-                : ee::math::Vector2<float>(sprite.texture->getWidth(), sprite.texture->getHeight());
+            sprite->srcRect
+                ? sprite->srcRect->getSize()
+                : ee::math::Vector2<float>(sprite->texture->getWidth(), sprite->texture->getHeight());
 
-        ee::math::Vector2<float> drawSize(baseSize.x * transform.scale.x,
-                                          baseSize.y * transform.scale.y);
+        ee::math::Vector2<float> drawSize(baseSize.x * transform->scale.x,
+                                          baseSize.y * transform->scale.y);
 
         ee::math::Rect<float> destRect;
         destRect.setSize(drawSize);
-        destRect.setPosition(transform.position);
+        destRect.setPosition(transform->position);
 
         SpriteEntry entry;
-        entry.m_texture = sprite.texture.get();
+        entry.m_texture = sprite->texture.get();
         entry.m_destRect = destRect;
-        entry.m_srcRect = sprite.srcRect;
-        entry.m_angle = transform.rotation;
-        entry.m_alpha = sprite.alpha;
-        entry.m_tint = sprite.tint;
+        entry.m_srcRect = sprite->srcRect;
+        entry.m_angle = transform->rotation;
+        entry.m_alpha = sprite->alpha;
+        entry.m_tint = sprite->tint;
 
         entries.push_back(entry);
     }
