@@ -1,8 +1,11 @@
 #pragma once
 #include <string>
 #include <memory>
+#include <optional>
+#include <cstdint>
 
 #include "renderer/Texture.hpp"
+#include "renderer/Color.hpp"
 #include "math/Rect.hpp"
 #include "renderer/TextureManager.hpp"
 
@@ -41,7 +44,11 @@ namespace ee::renderer
         void Start();
         void End();
 
-        void Draw(const Texture &_text, ee::math::Rect<float> _destRect);
-        void Draw(const Texture &_text, ee::math::Rect<float> _destRect, ee::math::Rect<float> _srcRect);
+        void Draw(const Texture &_texture,
+                  ee::math::Rect<float> _destRect,
+                  std::optional<ee::math::Rect<float>> _srcRect = std::nullopt,
+                  float _angle = 0.0f,
+                  std::uint8_t _alpha = 255,
+                  Color _tint = {});
     };
 }

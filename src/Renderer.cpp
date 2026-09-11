@@ -33,28 +33,39 @@ void ee::renderer::Renderer::End()
     SDL_RenderPresent(m_renderer);
 }
 
-void ee::renderer::Renderer::Draw(const Texture &_text, ee::math::Rect<float> _destRect)
+void ee::renderer::Renderer::Draw(const Texture &_texture,
+                                  ee::math::Rect<float> _destRect,
+                                  std::optional<ee::math::Rect<float>> _srcRect,
+                                  float _angle,
+                                  std::uint8_t _alpha,
+                                  Color _tint)
 {
+    // Rectangle de destination : (x, y) = coin haut-gauche pour SDL.
     SDL_FRect dstRect;
     dstRect.x = _destRect.getPosition(0, 0).x;
     dstRect.y = _destRect.getPosition(0, 0).y;
     dstRect.w = _destRect.getSize().x;
     dstRect.h = _destRect.getSize().y;
-    SDL_RenderTexture(m_renderer, _text.getTexture(), nullptr, &dstRect);
-}
 
-void ee::renderer::Renderer::Draw(const Texture &_text, ee::math::Rect<float> _destRect, ee::math::Rect<float> _srcRect)
-{
-        SDL_FRect dstRect;
-    dstRect.x = _destRect.getPosition().x;
-    dstRect.y = _destRect.getPosition().y;
-    dstRect.w = _destRect.getSize().x;
-    dstRect.h = _destRect.getSize().y;
+    // Etat par-instance : on le pose sur la texture (partagee) juste avant
+    // de dessiner, a partir des valeurs de CE sprite. Le sprite suivant qui
+    // partage la meme texture reecrira ces mods avec les siens -> pas de fuite.
+    SDL_SetTextureAlphaMod(_texture.getTexture(), _alpha);
+    SDL_SetTextureColorMod(_texture.getTexture(), _tint.r, _tint.g, _tint.b);
 
-        SDL_FRect srcRect;
-    srcRect.x = _srcRect.getPosition().x;
-    srcRect.y = _srcRect.getPosition().y;
-    srcRect.w = _srcRect.getSize().x;
-    srcRect.h = _srcRect.getSize().y;
-    SDL_RenderTexture(m_renderer, _text.getTexture(), &srcRect, &dstRect);
+    // srcRect optionnel : nullptr => toute la texture.
+    SDL_FRect srcRect;
+    const SDL_FRect *srcPtr = nullptr;
+    if (_srcRect)
+    {
+        srcRect.x = _srcRect->getPosition(0, 0).x;
+        srcRect.y = _srcRect->getPosition(0, 0).y;
+        srcRect.w = _srcRect->getSize().x;
+        srcRect.h = _srcRect->getSize().y;
+        srcPtr = &srcRect;
+    }
+
+    // center = nullptr => rotation autour du centre du dstRect.
+    SDL_RenderTextureRotated(m_renderer, _texture.getTexture(), srcPtr, &dstRect,
+                             _angle, nullptr, SDL_FLIP_NONE);
 }

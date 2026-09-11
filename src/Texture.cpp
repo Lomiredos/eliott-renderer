@@ -8,6 +8,9 @@ ee::renderer::Texture::Texture(SDL_Renderer *_renderer, const char *_path)
     if (!m_texture)
         throw std::runtime_error(SDL_GetError());
 
+    // Necessaire pour que l'alpha mod (transparence reglable) soit visible.
+    SDL_SetTextureBlendMode(m_texture, SDL_BLENDMODE_BLEND);
+
     SDL_GetTextureSize(m_texture, &m_width, &m_height);
 }
 ee::renderer::Texture::~Texture()
