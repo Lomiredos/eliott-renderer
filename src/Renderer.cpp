@@ -25,12 +25,28 @@ ee::renderer::Renderer::~Renderer()
 }
 void ee::renderer::Renderer::Start()
 {
+    SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
     SDL_RenderClear(m_renderer);
 }
 
 void ee::renderer::Renderer::End()
 {
     SDL_RenderPresent(m_renderer);
+}
+
+void ee::renderer::Renderer::DrawRect(ee::math::Rect<float> _rect, Color _color, bool _filled)
+{
+    SDL_FRect rect;
+    rect.x = _rect.getPosition(0, 0).x;
+    rect.y = _rect.getPosition(0, 0).y;
+    rect.w = _rect.getSize().x;
+    rect.h = _rect.getSize().y;
+
+    SDL_SetRenderDrawColor(m_renderer, _color.r, _color.g, _color.b, 255);
+    if (_filled)
+        SDL_RenderFillRect(m_renderer, &rect);
+    else
+        SDL_RenderRect(m_renderer, &rect);
 }
 
 void ee::renderer::Renderer::Draw(const Texture &_texture,

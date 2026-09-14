@@ -23,7 +23,7 @@ add_library(eliott-renderer STATIC
     src/Renderer.cpp
     src/Texture.cpp
     src/SpriteBatch.cpp
-    src/SpriteRenderer.cpp
+    src/SpriteRenderSystem.cpp
 )
 
 target_include_directories(eliott-renderer PUBLIC

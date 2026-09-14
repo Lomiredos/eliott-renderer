@@ -21,6 +21,7 @@ namespace ee::renderer
 
         void setPosition(float _x, float _y) { m_x = _x; m_y = _y; }
         void move(float _dx, float _dy) { m_x += _dx; m_y += _dy; }
+        void centerOn(float _x, float _y) { m_x = _x - m_width * 0.5f; m_y = _y - m_height * 0.5f; }
 
         float getX() const { return m_x; }
         float getY() const { return m_y; }

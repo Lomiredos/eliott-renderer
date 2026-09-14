@@ -1,18 +1,20 @@
-#include "renderer/SpriteRenderer.hpp"
+#include "renderer/SpriteRenderSystem.hpp"
+#include "renderer/Sprite.hpp"
+#include "ecs/World.hpp"
+#include "math/Transform.hpp"
 
 #include <vector>
 #include <algorithm>
 
-void ee::renderer::SpriteRenderer::render(Renderer &_renderer, const Camera &_camera)
+void ee::renderer::SpriteRenderSystem::render(ee::ecs::World &_world, Renderer &_renderer, Camera &_camera)
 {
-    std::vector<ee::ecs::EntityID> ordered(m_system->m_entities.begin(),
-                                           m_system->m_entities.end());
+    std::vector<ee::ecs::EntityID> ordered(m_entities.begin(), m_entities.end());
 
     std::sort(ordered.begin(), ordered.end(),
-              [this](ee::ecs::EntityID _a, ee::ecs::EntityID _b)
+              [&_world](ee::ecs::EntityID _a, ee::ecs::EntityID _b)
               {
-                  return m_world.getComponent<Sprite>(_a)->layer <
-                         m_world.getComponent<Sprite>(_b)->layer;
+                  return _world.getComponent<Sprite>(_a)->layer <
+                         _world.getComponent<Sprite>(_b)->layer;
               });
 
     std::vector<SpriteEntry> entries;
@@ -20,8 +22,8 @@ void ee::renderer::SpriteRenderer::render(Renderer &_renderer, const Camera &_ca
 
     for (ee::ecs::EntityID id : ordered)
     {
-        ee::math::Transform *transform = m_world.getComponent<ee::math::Transform>(id);
-        Sprite *sprite = m_world.getComponent<Sprite>(id);
+        ee::math::Transform *transform = _world.getComponent<ee::math::Transform>(id);
+        Sprite *sprite = _world.getComponent<Sprite>(id);
 
         if (transform == nullptr || sprite == nullptr || !sprite->texture)
             continue;
