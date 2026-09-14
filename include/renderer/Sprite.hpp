@@ -15,9 +15,11 @@ namespace ee::renderer
     {
         std::shared_ptr<Texture> texture;         
         std::optional<ee::math::Rect<float>> srcRect;  
-        std::uint8_t alpha = 255;                      
-        Color tint = {};                              
-        int layer = 0;                               
+        std::uint8_t alpha = 255;
+        Color tint = {};
+        int layer = 0;
+        bool flipX = false;
+        bool flipY = false;
     };
 
 }

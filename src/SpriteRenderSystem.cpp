@@ -47,6 +47,8 @@ void ee::renderer::SpriteRenderSystem::render(ee::ecs::World &_world, Renderer &
         entry.m_angle = transform->rotation;
         entry.m_alpha = sprite->alpha;
         entry.m_tint = sprite->tint;
+        entry.m_flipX = sprite->flipX;
+        entry.m_flipY = sprite->flipY;
 
         entries.push_back(entry);
     }

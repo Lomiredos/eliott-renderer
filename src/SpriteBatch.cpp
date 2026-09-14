@@ -11,6 +11,7 @@ void ee::renderer::SpriteBatch::DrawAll(Renderer &_rend, const Camera &_cam, con
         screenRect.setPosition(ee::math::Vector2<float>(_cam.getScreenX(screenRect.getPosition().x), _cam.getScreenY(screenRect.getPosition().y)));
 
         _rend.Draw(*entity.m_texture, screenRect, entity.m_srcRect,
-                   entity.m_angle, entity.m_alpha, entity.m_tint);
+                   entity.m_angle, entity.m_alpha, entity.m_tint,
+                   entity.m_flipX, entity.m_flipY);
     }
 }

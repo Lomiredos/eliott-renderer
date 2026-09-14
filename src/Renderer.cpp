@@ -54,7 +54,9 @@ void ee::renderer::Renderer::Draw(const Texture &_texture,
                                   std::optional<ee::math::Rect<float>> _srcRect,
                                   float _angle,
                                   std::uint8_t _alpha,
-                                  Color _tint)
+                                  Color _tint,
+                                  bool _flipX,
+                                  bool _flipY)
 {
     // Rectangle de destination : (x, y) = coin haut-gauche pour SDL.
     SDL_FRect dstRect;
@@ -81,7 +83,13 @@ void ee::renderer::Renderer::Draw(const Texture &_texture,
         srcPtr = &srcRect;
     }
 
+    SDL_FlipMode flip = SDL_FLIP_NONE;
+    if (_flipX)
+        flip = static_cast<SDL_FlipMode>(flip | SDL_FLIP_HORIZONTAL);
+    if (_flipY)
+        flip = static_cast<SDL_FlipMode>(flip | SDL_FLIP_VERTICAL);
+
     // center = nullptr => rotation autour du centre du dstRect.
     SDL_RenderTextureRotated(m_renderer, _texture.getTexture(), srcPtr, &dstRect,
-                             _angle, nullptr, SDL_FLIP_NONE);
+                             _angle, nullptr, flip);
 }

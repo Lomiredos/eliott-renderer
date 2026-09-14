@@ -20,9 +20,11 @@ namespace ee::renderer
         ee::math::Rect<float> m_destRect;
         std::optional<ee::math::Rect<float>> m_srcRect;
 
-        float m_angle = 0.0f;        
-        std::uint8_t m_alpha = 255;  
-        Color m_tint = {};           
+        float m_angle = 0.0f;
+        std::uint8_t m_alpha = 255;
+        Color m_tint = {};
+        bool m_flipX = false;
+        bool m_flipY = false;
     };
 
     class SpriteBatch

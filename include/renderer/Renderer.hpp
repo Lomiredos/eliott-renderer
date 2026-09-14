@@ -49,7 +49,9 @@ namespace ee::renderer
                   std::optional<ee::math::Rect<float>> _srcRect = std::nullopt,
                   float _angle = 0.0f,
                   std::uint8_t _alpha = 255,
-                  Color _tint = {});
+                  Color _tint = {},
+                  bool _flipX = false,
+                  bool _flipY = false);
 
         // Rectangle plein ou en contour (debug, sol, UI simple).
         void DrawRect(ee::math::Rect<float> _rect, Color _color, bool _filled = true);
