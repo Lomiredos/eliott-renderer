@@ -1,119 +1,113 @@
 #include "renderer/Renderer.hpp"
-#include "renderer/Texture.hpp"
-#include "renderer/SpriteBatch.hpp"
-#include "renderer/Font.hpp"
 #include "SDL3/SDL.h"
+#include "renderer/Font.hpp"
+#include "renderer/SpriteBatch.hpp"
+#include "renderer/Texture.hpp"
 #include <SDL3_ttf/SDL_ttf.h>
+ee::renderer::Renderer::Renderer(float _width, float _height, const char *_name)
+    : m_name(_name), m_width(_width), m_height(_height) {
+  m_window = SDL_CreateWindow(m_name.c_str(), m_width, m_height, 0);
 
-ee::renderer::Renderer::Renderer(float _width, float _height, const char *_name) : m_name(_name), m_width(_width), m_height(_height)
-{
-    m_window = SDL_CreateWindow(m_name.c_str(), m_width, m_height, 0);
+  if (!m_window)
+    throw std::runtime_error(SDL_GetError());
 
-    if (!m_window)
-        throw std::runtime_error(SDL_GetError());
+  m_renderer = SDL_CreateRenderer(m_window, nullptr);
 
-    m_renderer = SDL_CreateRenderer(m_window, nullptr);
+  if (!m_renderer)
+    throw std::runtime_error(SDL_GetError());
 
-    if (!m_renderer)
-        throw std::runtime_error(SDL_GetError());
+  m_textureManager.init(m_renderer);
 
-    m_textureManager.init(m_renderer);
-
-    if (!TTF_Init())
-        throw std::runtime_error(SDL_GetError());
+  if (!TTF_Init())
+    throw std::runtime_error(SDL_GetError());
 }
 
-ee::renderer::Renderer::~Renderer()
-{
-    TTF_Quit();
-    SDL_DestroyWindow(m_window);
-    SDL_DestroyRenderer(m_renderer);
+ee::renderer::Renderer::~Renderer() {
+  TTF_Quit();
+  SDL_DestroyWindow(m_window);
+  SDL_DestroyRenderer(m_renderer);
 }
-void ee::renderer::Renderer::Start()
-{
-    SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
-    SDL_RenderClear(m_renderer);
+void ee::renderer::Renderer::Start() {
+  SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
+  SDL_RenderClear(m_renderer);
 }
 
-void ee::renderer::Renderer::End()
-{
-    SDL_RenderPresent(m_renderer);
+void ee::renderer::Renderer::End() { SDL_RenderPresent(m_renderer); }
+
+void ee::renderer::Renderer::DrawRect(ee::math::Rect<float> _rect,
+                                      ee::renderer::Color _color,
+                                      bool _filled) {
+  SDL_FRect rect;
+  rect.x = _rect.getPosition(0, 0).x;
+  rect.y = _rect.getPosition(0, 0).y;
+  rect.w = _rect.getSize().x;
+  rect.h = _rect.getSize().y;
+
+  SDL_SetRenderDrawColor(m_renderer, _color.r, _color.g, _color.b, 255);
+  if (_filled)
+    SDL_RenderFillRect(m_renderer, &rect);
+  else
+    SDL_RenderRect(m_renderer, &rect);
 }
 
-void ee::renderer::Renderer::DrawRect(ee::math::Rect<float> _rect, Color _color, bool _filled)
-{
-    SDL_FRect rect;
-    rect.x = _rect.getPosition(0, 0).x;
-    rect.y = _rect.getPosition(0, 0).y;
-    rect.w = _rect.getSize().x;
-    rect.h = _rect.getSize().y;
-
-    SDL_SetRenderDrawColor(m_renderer, _color.r, _color.g, _color.b, 255);
-    if (_filled)
-        SDL_RenderFillRect(m_renderer, &rect);
-    else
-        SDL_RenderRect(m_renderer, &rect);
+void ee::renderer::Renderer::DrawLine(ee::math::Vector2<float> _a,
+                                      ee::math::Vector2<float> _b,
+                                      Color _color) {
+  SDL_SetRenderDrawColor(m_renderer, _color.r, _color.g, _color.b, 255);
+  SDL_RenderLine(m_renderer, _a.x, _a.y, _b.x, _b.y);
 }
 
-std::shared_ptr<ee::renderer::Texture> ee::renderer::Renderer::createText(const std::string &_text, Font &_font, Color _color)
-{
-    SDL_Color color{_color.r, _color.g, _color.b, 255};
-    SDL_Surface *surface = TTF_RenderText_Blended(_font.get(), _text.c_str(), _text.length(), color);
-    if (!surface)
-        return nullptr;
+std::shared_ptr<ee::renderer::Texture>
+ee::renderer::Renderer::createText(const std::string &_text, Font &_font,
+                                   Color _color) {
+  SDL_Color color{_color.r, _color.g, _color.b, 255};
+  SDL_Surface *surface =
+      TTF_RenderText_Blended(_font.get(), _text.c_str(), _text.length(), color);
+  if (!surface)
+    return nullptr;
 
-    SDL_Texture *tex = SDL_CreateTextureFromSurface(m_renderer, surface);
-    float w = static_cast<float>(surface->w);
-    float h = static_cast<float>(surface->h);
-    SDL_DestroySurface(surface);
+  SDL_Texture *tex = SDL_CreateTextureFromSurface(m_renderer, surface);
+  float w = static_cast<float>(surface->w);
+  float h = static_cast<float>(surface->h);
+  SDL_DestroySurface(surface);
 
-    if (!tex)
-        return nullptr;
+  if (!tex)
+    return nullptr;
 
-    return std::shared_ptr<Texture>(new Texture(tex, w, h));
+  return std::shared_ptr<Texture>(new Texture(tex, w, h));
 }
 
 void ee::renderer::Renderer::Draw(const Texture &_texture,
                                   ee::math::Rect<float> _destRect,
                                   std::optional<ee::math::Rect<float>> _srcRect,
-                                  float _angle,
-                                  std::uint8_t _alpha,
-                                  Color _tint,
-                                  bool _flipX,
-                                  bool _flipY)
-{
-    // Rectangle de destination : (x, y) = coin haut-gauche pour SDL.
-    SDL_FRect dstRect;
-    dstRect.x = _destRect.getPosition(0, 0).x;
-    dstRect.y = _destRect.getPosition(0, 0).y;
-    dstRect.w = _destRect.getSize().x;
-    dstRect.h = _destRect.getSize().y;
+                                  float _angle, std::uint8_t _alpha,
+                                  Color _tint, bool _flipX, bool _flipY) {
+  SDL_FRect dstRect;
+  dstRect.x = _destRect.getPosition(0, 0).x;
+  dstRect.y = _destRect.getPosition(0, 0).y;
+  dstRect.w = _destRect.getSize().x;
+  dstRect.h = _destRect.getSize().y;
 
-    // Etat par-instance : on le pose sur la texture (partagee) juste avant
-    // de dessiner, a partir des valeurs de CE sprite. Le sprite suivant qui
-    // partage la meme texture reecrira ces mods avec les siens -> pas de fuite.
-    SDL_SetTextureAlphaMod(_texture.getTexture(), _alpha);
-    SDL_SetTextureColorMod(_texture.getTexture(), _tint.r, _tint.g, _tint.b);
+  SDL_SetTextureAlphaMod(_texture.getTexture(), _alpha);
+  SDL_SetTextureColorMod(_texture.getTexture(), _tint.r, _tint.g, _tint.b);
 
-    // srcRect optionnel : nullptr => toute la texture.
-    SDL_FRect srcRect;
-    const SDL_FRect *srcPtr = nullptr;
-    if (_srcRect)
-    {
-        srcRect.x = _srcRect->getPosition(0, 0).x;
-        srcRect.y = _srcRect->getPosition(0, 0).y;
-        srcRect.w = _srcRect->getSize().x;
-        srcRect.h = _srcRect->getSize().y;
-        srcPtr = &srcRect;
-    }
+  // srcRect optionnel : nullptr => toute la texture.
+  SDL_FRect srcRect;
+  const SDL_FRect *srcPtr = nullptr;
+  if (_srcRect) {
+    srcRect.x = _srcRect->getPosition(0, 0).x;
+    srcRect.y = _srcRect->getPosition(0, 0).y;
+    srcRect.w = _srcRect->getSize().x;
+    srcRect.h = _srcRect->getSize().y;
+    srcPtr = &srcRect;
+  }
 
-    SDL_FlipMode flip = SDL_FLIP_NONE;
-    if (_flipX)
-        flip = static_cast<SDL_FlipMode>(flip | SDL_FLIP_HORIZONTAL);
-    if (_flipY)
-        flip = static_cast<SDL_FlipMode>(flip | SDL_FLIP_VERTICAL);
+  SDL_FlipMode flip = SDL_FLIP_NONE;
+  if (_flipX)
+    flip = static_cast<SDL_FlipMode>(flip | SDL_FLIP_HORIZONTAL);
+  if (_flipY)
+    flip = static_cast<SDL_FlipMode>(flip | SDL_FLIP_VERTICAL);
 
-    // center = nullptr => rotation autour du centre du dstRect.
-    SDL_RenderTextureRotated(m_renderer, _texture.getTexture(), srcPtr, &dstRect,
-                             _angle, nullptr, flip);
+  SDL_RenderTextureRotated(m_renderer, _texture.getTexture(), srcPtr, &dstRect,
+                           _angle, nullptr, flip);
 }
