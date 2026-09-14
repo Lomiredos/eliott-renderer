@@ -15,6 +15,8 @@ struct SDL_Renderer;
 namespace ee::renderer
 {
 
+    class Font;
+
     class Renderer
     {
 
@@ -55,5 +57,8 @@ namespace ee::renderer
 
         // Rectangle plein ou en contour (debug, sol, UI simple).
         void DrawRect(ee::math::Rect<float> _rect, Color _color, bool _filled = true);
+
+        // Rend une chaine en texture (a mettre en cache, pas a chaque frame).
+        std::shared_ptr<Texture> createText(const std::string &_text, Font &_font, Color _color);
     };
 }

@@ -16,6 +16,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(SDL3 CONFIG REQUIRED)
 find_package(SDL3_image CONFIG REQUIRED)
+find_package(SDL3_ttf CONFIG REQUIRED)
 
 
 
@@ -24,6 +25,7 @@ add_library(eliott-renderer STATIC
     src/Texture.cpp
     src/SpriteBatch.cpp
     src/SpriteRenderSystem.cpp
+    src/Font.cpp
 )
 
 target_include_directories(eliott-renderer PUBLIC
@@ -33,6 +35,7 @@ target_include_directories(eliott-renderer PUBLIC
 target_link_libraries(eliott-renderer PRIVATE
     SDL3::SDL3
     SDL3_image::SDL3_image
+    SDL3_ttf::SDL3_ttf
 )
 
 target_link_libraries(eliott-renderer PUBLIC

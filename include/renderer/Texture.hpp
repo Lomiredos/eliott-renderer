@@ -16,8 +16,9 @@ namespace ee::renderer{
             float m_height = 0;
 
             Texture(SDL_Renderer* _renderer, const char* _path);
-            
-            
+            Texture(SDL_Texture* _texture, float _width, float _height); // adopte une SDL_Texture (ex: texte)
+
+
             Texture(const Texture&) = delete;
             Texture& operator=(const Texture&) = delete;
             

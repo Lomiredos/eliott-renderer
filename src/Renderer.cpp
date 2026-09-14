@@ -1,7 +1,9 @@
 #include "renderer/Renderer.hpp"
 #include "renderer/Texture.hpp"
 #include "renderer/SpriteBatch.hpp"
+#include "renderer/Font.hpp"
 #include "SDL3/SDL.h"
+#include <SDL3_ttf/SDL_ttf.h>
 
 ee::renderer::Renderer::Renderer(float _width, float _height, const char *_name) : m_name(_name), m_width(_width), m_height(_height)
 {
@@ -16,10 +18,14 @@ ee::renderer::Renderer::Renderer(float _width, float _height, const char *_name)
         throw std::runtime_error(SDL_GetError());
 
     m_textureManager.init(m_renderer);
+
+    if (!TTF_Init())
+        throw std::runtime_error(SDL_GetError());
 }
 
 ee::renderer::Renderer::~Renderer()
 {
+    TTF_Quit();
     SDL_DestroyWindow(m_window);
     SDL_DestroyRenderer(m_renderer);
 }
@@ -47,6 +53,24 @@ void ee::renderer::Renderer::DrawRect(ee::math::Rect<float> _rect, Color _color,
         SDL_RenderFillRect(m_renderer, &rect);
     else
         SDL_RenderRect(m_renderer, &rect);
+}
+
+std::shared_ptr<ee::renderer::Texture> ee::renderer::Renderer::createText(const std::string &_text, Font &_font, Color _color)
+{
+    SDL_Color color{_color.r, _color.g, _color.b, 255};
+    SDL_Surface *surface = TTF_RenderText_Blended(_font.get(), _text.c_str(), _text.length(), color);
+    if (!surface)
+        return nullptr;
+
+    SDL_Texture *tex = SDL_CreateTextureFromSurface(m_renderer, surface);
+    float w = static_cast<float>(surface->w);
+    float h = static_cast<float>(surface->h);
+    SDL_DestroySurface(surface);
+
+    if (!tex)
+        return nullptr;
+
+    return std::shared_ptr<Texture>(new Texture(tex, w, h));
 }
 
 void ee::renderer::Renderer::Draw(const Texture &_texture,

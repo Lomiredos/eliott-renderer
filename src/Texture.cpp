@@ -13,6 +13,12 @@ ee::renderer::Texture::Texture(SDL_Renderer *_renderer, const char *_path)
 
     SDL_GetTextureSize(m_texture, &m_width, &m_height);
 }
+ee::renderer::Texture::Texture(SDL_Texture *_texture, float _width, float _height)
+    : m_texture(_texture), m_width(_width), m_height(_height)
+{
+    SDL_SetTextureBlendMode(m_texture, SDL_BLENDMODE_BLEND);
+}
+
 ee::renderer::Texture::~Texture()
 {
     SDL_DestroyTexture(m_texture);
